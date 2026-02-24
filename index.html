@@ -35,7 +35,7 @@ body{
 .input-group{
   display:flex;
   align-items:center;
-  margin-bottom:10px;
+  margin-bottom:5px;
 }
 .currency-symbol{
   width:35px;
@@ -53,6 +53,7 @@ body{
   border-radius:8px;
   color:white;
   padding:10px;
+  margin-bottom:5px;
 }
 select{
   flex:1;
@@ -62,6 +63,11 @@ select{
   color:white;
   border:none;
   border-radius:8px;
+}
+.rate-display{
+  font-size:14px;
+  color:#aaa;
+  margin-bottom:10px;
 }
 .convert{
   width:100%;
@@ -132,11 +138,13 @@ button:hover{
 <div class="currency-symbol" id="symbol-from-select">От:</div>
 <select id="from"></select>
 </div>
+<div class="rate-display" id="rate-from-display">1 EUR = ...</div>
 
 <div class="input-group">
-<div class="currency-symbol" id="symbol-to">💵</div>
+<div class="currency-symbol" id="symbol-to">$</div>
 <select id="to"></select>
 </div>
+<div class="rate-display" id="rate-to-display">1 EUR = ...</div>
 
 <button class="convert" onclick="convert()">Конвертирай</button>
 <div id="result" class="result">0</div>
@@ -187,7 +195,7 @@ async function load(){
     to.value="USD"
 
     updateSymbols()
-
+    updateRates()
     document.getElementById("status").innerHTML="✓ Live курсове заредени"
     convert()
   }catch{
@@ -204,7 +212,7 @@ function updateSymbols(){
   const to = document.getElementById("to").value
   const symbols = {
     "EUR":"€",
-    "USD":"💵",
+    "USD":"$",
     "GBP":"£",
     "JPY":"¥",
     "ALL":"L",
@@ -216,8 +224,21 @@ function updateSymbols(){
   document.getElementById("symbol-to").innerText = symbols[to] || to
 }
 
-document.getElementById("from").addEventListener("change",updateSymbols)
-document.getElementById("to").addEventListener("change",updateSymbols)
+function updateRates(){
+  const from = document.getElementById("from").value
+  const to = document.getElementById("to").value
+  document.getElementById("rate-from-display").innerText = `1 EUR = ${(rates[from]||1).toFixed(4)} ${from}`
+  document.getElementById("rate-to-display").innerText = `1 EUR = ${(rates[to]||1).toFixed(4)} ${to}`
+}
+
+document.getElementById("from").addEventListener("change",()=>{
+  updateSymbols()
+  updateRates()
+})
+document.getElementById("to").addEventListener("change",()=>{
+  updateSymbols()
+  updateRates()
+})
 
 function num(n){
   let a=document.getElementById("amount")
