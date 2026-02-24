@@ -69,6 +69,20 @@ select{
   color:#aaa;
   margin-bottom:10px;
 }
+.switch-button{
+  width:100%;
+  padding:8px;
+  background:#003781;
+  border:none;
+  color:white;
+  font-size:18px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+.switch-button:hover{
+  background:#1b4ba0;
+}
 .convert{
   width:100%;
   padding:14px;
@@ -77,6 +91,7 @@ select{
   font-size:18px;
   border:none;
   border-radius:8px;
+  margin-top:5px;
 }
 .result{
   text-align:center;
@@ -145,6 +160,8 @@ button:hover{
 <select id="to"></select>
 </div>
 <div class="rate-display" id="rate-to-display">1 EUR = ...</div>
+
+<button class="switch-button" onclick="switchCurrencies()">↔ Размяна на валутите</button>
 
 <button class="convert" onclick="convert()">Конвертирай</button>
 <div id="result" class="result">0</div>
@@ -239,6 +256,17 @@ document.getElementById("to").addEventListener("change",()=>{
   updateSymbols()
   updateRates()
 })
+
+function switchCurrencies(){
+  let from = document.getElementById("from")
+  let to = document.getElementById("to")
+  let temp = from.value
+  from.value = to.value
+  to.value = temp
+  updateSymbols()
+  updateRates()
+  convert()
+}
 
 function num(n){
   let a=document.getElementById("amount")
